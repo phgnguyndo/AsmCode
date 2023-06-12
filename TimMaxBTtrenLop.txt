@@ -1,0 +1,41 @@
+INCLUDE Irvine32.inc
+
+.data
+   str1 byte "Nhap a: ",0
+   str2 byte "Nhap b: ",0
+   str3 byte "Max: ",0
+   a db ?
+   b db ?
+
+.code
+main PROC
+     
+main endp
+
+FindMax PROC
+       mov edx, offset str1
+       call WriteString
+       call ReadInt
+       mov a, al
+
+       mov edx, offset str2
+       call WriteString
+       call ReadInt
+       mov b, al
+
+       mov al, 0
+       mov al, a
+       cmp al, b
+       ja L1
+       mov al, b
+       mov edx, offset str3
+       call WriteString
+       call WriteDec
+    L1:
+        mov edx,offset str3
+        call WriteString
+        call WriteDec
+ret
+FindMax ENDP
+
+end main

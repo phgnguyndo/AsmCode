@@ -1,0 +1,64 @@
+INCLUDE Irvine32.inc
+    
+.data
+    arr dword 9,-2,8,0,6,5,-2
+    n dword ?
+.code
+main PROC
+    mov ebx, 4
+    mov esi, offset arr
+    mov ecx, lengthof arr
+    call dumpmem
+
+
+    mov eax, lengthof arr
+    mov n, eax ;n=size, ecx = i, ebx = j
+    xor ecx, ecx; i = 0
+    L1:         ;for1 start
+    cmp ecx, n  ;(i<n)
+    je L2       ;{
+        mov eax, dword ptr [arr + ecx*4]    ;eax = arr[i]
+        cmp eax, 0
+        jge L3          ;if(arr[i]>0)
+            mov ebx, ecx;j=i
+            mov edx, n
+            dec edx     ;edx = n-1
+            L4:         ;for2 start
+            cmp ebx, edx
+            jae L5  
+                mov edi, ebx
+                inc edi
+                mov eax, dword ptr [arr + edi * 4]
+                mov dword ptr [arr + ebx * 4], eax 
+            inc ebx     ;j++
+            jmp L4
+            L5:         ;end for2
+        mov eax, n      ;n--
+        dec eax
+        mov n, eax
+        jmp L1
+        L3:             ;end if
+    inc ecx;    i++
+    jmp L1;     }
+    L2:         ;end for1
+
+    mov ebx, 4
+    mov esi, offset arr
+    mov ecx, n
+    call dumpmem
+    exit
+main ENDP
+
+END main
+
+;for(i=0;i<n;i++)
+;{
+;   if(a[i]<0)
+;   {    
+;      for(j=i;j<n-1;j++)
+;      {
+;           a[j]=a[j+1];
+;      }
+;      n=n-1;
+;   }
+;}

@@ -1,0 +1,29 @@
+INCLUDE Irvine32.inc
+
+.data
+     str1 byte "Moi ban nhap n: ", 10,13,0
+     str2 byte "Tong cac so tu 1 den n: ", 0
+.code
+main PROC
+     call SumFunction
+     mov edx, offset str2
+     call WriteString 
+     call WriteDec
+main endp
+
+SumFunction PROC
+       mov edx, offset str1
+       call WriteString
+       call ReadInt
+       mov ecx, eax
+       mov eax, 0
+       mov ebx, 1
+       L1:          
+          add eax, ebx
+          inc ebx
+          loop L1
+       call WriteDec
+       ret
+SumFunction ENDP
+
+end main

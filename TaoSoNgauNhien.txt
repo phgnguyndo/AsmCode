@@ -1,0 +1,16 @@
+INCLUDE Irvine32.inc
+
+.data
+ 
+.code
+main PROC
+mov ecx, 10
+   L:
+    mov eax, 100
+    call RandomRange
+    call WriteInt
+    loop L
+
+exit
+main endp
+end main

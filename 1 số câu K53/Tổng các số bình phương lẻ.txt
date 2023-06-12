@@ -1,0 +1,45 @@
+; AddTwo.asm - adds two 32-bit integers.
+; Chapter 3 example
+INCLUDE Irvine32.inc
+.386
+.model flat,stdcall
+.stack 4096
+ExitProcess proto,dwExitCode:dword
+
+.data
+msg_01 db 'Nhap so n: ',0
+Num dword ?
+SumBP dword 0
+i dword 1
+.code
+main proc    
+     call ReadNum
+     call Sum
+     call PRintSum
+	invoke ExitProcess,0
+main endp
+ReadNum PROC
+     MOV EDX,OFFSET msg_01
+     CALL WriteString
+     CALL ReadDec
+     MOV Num,EAX
+     RET
+ReadNum ENDP
+Sum PROC
+     MOV EBX,0;SUM
+     MOV EDI,i
+     .WHILE EDI <= Num
+          MOV EAX,EDI
+          MUL EDI
+          ADD EBX,EAX
+          ADD EDI,2
+     .ENDW
+     MOV SUMBP,EBX
+     ret
+Sum ENDP
+PrintSum PROC
+     MOV EAX,SumBP
+     CALL WriteDec
+     ret
+PrintSUm ENDP
+end main

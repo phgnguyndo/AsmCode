@@ -1,0 +1,37 @@
+INCLUDE Irvine32.inc
+
+.data
+ str1 byte "Moi ban nhap so can kiem tra ", 0
+ str2 byte "So ban nhap la so chan", 0
+ str3 byte "So ban nhap la so le", 0
+.code
+main PROC
+    L0:
+        mov edx, offset str1
+        call WriteString
+        call ReadInt 
+
+        mov bl, 2
+        div bl
+
+        mov al, ah
+        call WriteDec
+
+        cmp al, 0
+        je L1
+    
+        jmp L2
+
+    L1:
+        mov edx, offset str2
+        call WriteString
+        call CRLF
+        jmp L0
+    L2:
+        mov edx, offset str3
+        call WriteString
+        call CRLF
+        jmp L0
+exit
+main endp
+end main

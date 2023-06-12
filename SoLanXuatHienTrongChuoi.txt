@@ -1,0 +1,26 @@
+INCLUDE Irvine32.inc
+
+.data
+arr db "DoNguyenPhuongppppppp", 0
+sizeArr=($-arr)-1
+count db 0
+.code
+kitu PROC  
+    mov ecx, sizeArr
+    mov edi, offset arr
+    mov bl, "p"
+    Lap:
+       mov al, [edi]
+       .if al==bl
+           inc count
+       .endif
+       inc edi
+       loop Lap
+       ret
+kitu ENDP
+main proc     
+    call kitu
+    mov eax,dword ptr count 
+    call WriteDec
+main endp
+end main

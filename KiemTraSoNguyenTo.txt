@@ -1,0 +1,63 @@
+INCLUDE Irvine32.inc 
+
+.data
+   tb db "Nhap so n: ", 0
+   number dword ?
+   flag db ?
+.code
+ReadNumber PROC
+    mov edx, offset tb
+    call WriteString
+    call ReadInt 
+    mov number, eax
+    ret
+ReadNumber ENDP
+
+CheckSoNguyenTo PROC uses eax ebx ecx edx,num: dword
+     .if num<2 
+        mov flag, 0
+        ret
+     .endIf
+
+     mov edx, 0
+     mov eax, num
+     mov ebx, 2
+     div ebx; ket qua luu vao eax, so du luu vao edx
+     mov edi, eax
+     mov esi, 2
+
+     .WHILE esi<=edi
+        mov edx, 0
+        mov eax, num
+        div esi
+
+        .IF EDX==0
+            MOV flag, 0
+            ret
+        .ENDIF
+
+        inc esi
+     .ENDW
+     mov flag, 1
+     ret
+CheckSoNguyenTo ENDP
+
+PrintSoNguyenTo PROC uses eax ebx ecx edx,num:Dword
+     .IF flag==1;la so nguyen to ; check if "flag" variable is 1 (indicating a prime number)
+          MOV EAX,num ; move "number" into EAX register
+          call WriteDec ; write the number to console output
+          call CRLF ; write a line break
+     .ENDIF
+     ret ; return from the procedure   
+PrintSoNguyenTo ENDP
+
+main PROC 
+     call ReadNumber
+     mov edx, 2
+     .WHILE edx<number
+           invoke CheckSoNguyenTo,EDX
+           invoke PrintSoNguyenTo,EDX
+           INC EDX
+     .ENDW
+main ENDP
+END main

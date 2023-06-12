@@ -1,0 +1,62 @@
+INCLUDE Irvine32.inc
+
+.data
+ a db ?
+ b db ?
+ x db ?
+ d db ?
+ str1 byte "Nhap a, b, c: ", 0
+ str2 byte "PT Vo Nghiem", 0
+ str3 byte "PT co nghiem kep", 0
+ str4 byte "PT co hai nghiem phan biet", 0
+.code
+main PROC
+    call ReadNum
+    mov al, b
+    mov bl, b
+    mul bl
+    mov d, al
+
+    mov al, a
+    mov bl, x
+    mul bl
+    mov bl, 4
+    mul bl
+
+    sub d, al
+    mov al, d
+     
+    .if sign?  ;neu la so am
+        mov edx, offset str2
+        call WriteString
+        ret
+    .elseif zero?
+       MOV EDX,offset str3
+          call WriteString
+          MOV EAX,0
+          MOV BL,a
+          MOV AL,b
+          DIV BL
+          MOV BL,2
+          DIV BL
+          NEG EAX
+          call WriteInt
+     .ELSE
+          MOV EDX,offset str4
+          call WriteString
+     .ENDIF
+main endp
+
+ReadNum PROC
+       mov edx, offset str1
+       call WriteString
+       call ReadInt 
+       mov a, AL
+       call ReadInt 
+       mov b, Al
+       call ReadInt
+       mov x, AL
+       ret
+ReadNum ENDP 
+
+end main

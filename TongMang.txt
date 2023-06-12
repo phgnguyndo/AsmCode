@@ -1,0 +1,45 @@
+INCLUDE Irvine32.inc
+
+.data
+ Arr dword 20 dup(?)
+ str1 byte "Nhap so phan tu cua mang: " ,0
+ str2 byte "Phan tu thu " ,0
+ str3 byte "=", 0
+ str4 byte "Tong gia tri cua mang: ",0
+
+.code
+main PROC
+ mov edx, offset str1 
+ call WriteString
+ call ReadInt
+ mov ecx, eax
+ push ecx
+ mov ebx, 1
+ mov esi, offset Arr
+
+ NhapMang:
+         mov edx, offset str2
+         call WriteString
+         mov eax, ebx
+         call WriteInt
+         mov edx, offset str3
+         call WriteString
+         call ReadInt
+         mov [esi], eax
+         inc ebx
+         add esi, type Arr
+         loop NhapMang
+ mov eax, 0
+ mov ebx, 0
+ pop ecx
+ TinhTong:
+         add eax, Arr[ebx]
+         add ebx,4
+         loop TinhTong
+ mov edx, offset str4
+ call WriteString
+ call WriteInt
+
+exit
+main endp
+end main

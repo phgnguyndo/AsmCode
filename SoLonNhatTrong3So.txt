@@ -1,0 +1,54 @@
+INCLUDE Irvine32.inc
+
+.data
+ a byte ?
+ b byte ?
+ x byte ?
+ max byte ?
+ str1 byte "Nhap a: ",0
+ str2 byte "Nhap b: ",0
+ str3 byte "Nhap x: ",0
+ str4 byte "So lon nhat trong ba so la: ",0
+.code
+main PROC
+ call SoSanh
+ exit
+main endp
+
+SoSanh PROC
+ mov edx, offset str1
+ call WriteString
+ call ReadDec
+ mov a, al
+ mov al, 0
+
+ mov edx, offset str2
+ call WriteString
+ call ReadDec
+ mov b, al
+ mov al, 0
+
+ mov edx, offset str3
+ call WriteString
+ call ReadDec
+ mov x, al
+ mov al, 0
+
+ mov al, a
+ cmp al, b
+ jb L1
+ L:
+ cmp al, x
+ jb L2
+ L1:
+     mov al, b
+     jmp L
+     ret
+ L2: 
+     mov edx, offset str4
+     call writestring
+     mov al, x
+     call WriteDec 
+     ret
+SoSanh ENDP
+end main

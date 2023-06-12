@@ -1,0 +1,47 @@
+INCLUDE Irvine32.inc
+
+.data
+ arr dd 55,60,20,33,72,89,45,65,72,18
+ sample dd 50
+ sum dd 0
+ arrSize dd ?
+ index dd 0
+.code
+main PROC
+ mov arrSize, lengthof arr
+ ;mov eax, sample
+ ;call writeInt
+ mov ecx, arrSize
+ L1:
+    cmp index, 10
+    jl L2
+    jmp LL
+ LL:
+ L2: 
+    mov esi, offset arr
+    mov ebx, sample
+    cmp [esi], ebx
+    jbe L3
+
+ L3:
+    add eax, [esi]
+    mov sum, eax
+    
+ ;mov eax, sum
+ call WriteInt
+exit
+main endp
+end main
+;int array [] = {10,60,20,33,72,89,45,65,72,18};
+;int sample= 50;
+;int ArraySize = sizeof array / sizeof sample;
+;int index = 0;
+;int sum = 0;
+;while (index <ArraySize)
+;{
+;if (array [index] <= sample)
+;{
+;sum + = array [index];
+;}
+;index ++;
+;}

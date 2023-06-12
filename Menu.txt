@@ -1,0 +1,103 @@
+INCLUDE Irvine32.inc
+
+.data
+ menu1 byte "1. Tinh tong mang", 13,10, 0
+ menu2 byte "2. In chuoi da nhap ra man hinh",13,10, 0
+ menu3 byte "3. Thoat",13,10, 0
+ menu4 byte "Nhap lua chon: ",0
+
+ tada byte "Nhan phim bat ki de tro ve menu", 10,13, 0
+
+ nhapmang byte "Nhap so phan tu cua mang: ",0
+ nhaptungphantu byte "Nhap tung phan tu cua mang: ",0
+ TongMang byte "Tong cac phan tu cua mang la: ", 0
+ n byte ?
+ sum dd ?
+
+ nhapchuoi byte "Nhap chuoi: ", 0
+ inchuoi byte "Chuoi ban vua nhap la: ", 0
+ chuoivuanhap byte 40 dup(0)
+.code
+main PROC
+     call Menu
+     exit 
+main endp
+Nhap_TinhTong PROC
+     mov edx, offset nhapmang 
+     call WriteString
+     call ReadInt
+     mov ecx, eax
+     mov sum, 0
+     L1:
+        mov al, 0
+        call ReadDec 
+        add sum, eax 
+        loop L1
+    ret
+Nhap_TinhTong ENDP
+
+InTongMang PROC
+     mov eax, 0
+     mov edx, offset TongMang
+     call WriteString
+     mov eax, sum
+     call WriteDec
+     ret
+InTongMang ENDP
+
+NhapMotChuoi PROC
+     mov edx, offset nhapchuoi
+     call WriteString
+     mov ecx, SIZEOF chuoivuanhap
+     call ReadString
+     ret
+NhapMotChuoi ENDP
+
+InRaChuoi PROC
+     mov edx, offset inchuoi
+     call WriteString 
+     mov edx, offset chuoivuanhap
+     call WriteString
+     ret
+InRaChuoi ENDP
+
+Menu PROC
+    BatDau:
+            call Clrscr
+            mov edx, offset menu1 
+            call WriteString
+            mov edx, offset menu2 
+            call WriteString
+            mov edx, offset menu3
+            call WriteString
+            mov edx, offset menu4
+            mov eax, 0
+            call WriteString
+
+            call ReadInt
+
+            cmp al, 1
+            je TinhTongMang
+
+            cmp al, 2
+            je InChuoiMenu
+    
+            cmp al, 3
+            je KetThuc
+
+
+    TinhTongMang:
+            call Nhap_TinhTong
+            call InTongMang
+            call ReadChar
+            jmp BatDau
+    InChuoiMenu:
+            call NhapMotChuoi
+            call InRaChuoi
+            call ReadChar
+            jmp Batdau
+    KetThuc:
+    
+Menu ENDP
+
+end main

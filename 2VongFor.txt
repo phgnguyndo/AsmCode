@@ -1,0 +1,27 @@
+INCLUDE Irvine32.inc
+.data
+n dd 10
+sum dd 1
+.code
+TinhTong PROC   
+    mov ebx, 0
+    L3:
+            mov ecx, 0
+            L2: mov eax, 2
+                mul sum
+                mov sum, eax
+                inc ecx
+                cmp ecx, 1
+                jl L2
+       inc ebx
+       cmp ebx, n
+       jle L3
+ret
+TinhTong ENDP
+main PROC  
+    call TinhTong
+    mov eax, sum
+    call writeInt
+exit
+main ENDP
+END main

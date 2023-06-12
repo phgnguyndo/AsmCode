@@ -1,0 +1,110 @@
+; AddTwo.asm - adds two 32-bit integers.
+; Chapter 3 example
+INCLUDE Irvine32.inc
+.386
+.model flat,stdcall
+.stack 4096
+ExitProcess proto,dwExitCode:dword
+NhapMang PROTO ,pArr: PTR Byte,Count:Dword
+Sort PROTO,Count:Dword
+InMang PROTO, pArr:PTR byte,Count:Dword
+.data
+arr db 30 dup(?)
+sizeArr dword ?
+msg_01 db 'Nhap so phan tu cua mang: ',0
+msg_02 db 'Nhap cac phan tu: ',0
+i dword ?
+j dword ?
+key dword ?
+.code
+main proc    
+     mov edx,offset msg_01
+     call writestring
+     call readdec
+     mov sizeArr,eax
+    invoke NhapMang,ADDR arr,sizeArr
+    invoke Sort,sizeArr
+    invoke InMang,ADDr arr,sizeArr
+	invoke ExitProcess,0
+main endp
+NhapMang PROC,pArr: PTR Byte,Count:Dword 
+     MOV ECX,Count
+     MOV EDI, parr
+lap:
+     mov edx,offset msg_02
+     call writestring
+     call readint
+     mov [edi],eax
+     inc edi
+     loop lap
+     ret
+NhapMang ENDP
+Sort PROC,Count:Dword
+      ;int i, key, j;  
+    ;for (i = 1; i < n; i++) 
+    ;{  
+        ;key = arr[i];  
+        ;j = i - 1;  
+  ;
+        ;/* Move elements of arr[0..i-1], that are  
+        ;greater than key, to one position ahead  
+        ;of their current position */
+        ;while (j >= 0 && arr[j] > key) 
+        ;{  
+            ;arr[j + 1] = arr[j];  
+            ;j = j - 1;  
+        ;}  
+        ;arr[j + 1] = key;  
+     MOV ECX,Count;so lan duyet phan tu
+     DEC ECX;i=1->n-1
+     MOV EDI,1 ;i=1    
+     .WHILE ECX !=0
+     PUSH EDI
+     MOV i,EDI
+     MOV EAX,0
+     mov al,arr[EDI];eax=arr[i]
+     mov key,eax
+     DEC EDI;i=j-1
+     MOV j,EDI;eax=arr[j]
+
+    MOV EBX,0
+    MOV BL,arr[EDI];ebx=arr[j]
+     .while ((j >= 0) && (EBX > key));so sanh
+          MOV EDI,j
+          MOV ESI,j
+          INC EDI
+          MOV EDX,0
+          MOV DL,arr[EDI];arr[j+1]
+          XCHG DL,arr[ESI];arr[j+1]=arr[j]
+          MOV arr[EDI],DL;swap
+          SUB EDI,2
+          MOv j,EDI;j=j-1
+          MOV EBX,0
+          MOV BL,arr[EDI]
+     .ENDW    
+     MOV edi,j
+     INC edi;j=j+1
+     MOV EAX,0
+     MOV AL,arr[EDI];eax=arr[j+1]
+     XCHG EAX,key
+     MOV arr[EDI],AL;arr[j+1]=key
+     POP EDI
+     INC EDI
+     DEC ECX
+     .ENDW
+
+     ret
+
+Sort ENDP
+InMang PROC ,pArr: PTR Byte,Count:Dword
+     MOV EDI, parr
+     MOV ECX,Count
+lap:   
+     MOV EAX,0
+     mov al,[edi]
+     call writeint     
+     inc edi
+     loop lap
+     ret
+InMang ENDP
+end main

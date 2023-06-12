@@ -1,0 +1,39 @@
+INCLUDE Irvine32.inc
+
+.data
+   number dword ?
+   sqrtNumber dword ?
+   str1 byte "Nhap so chinh phuong: ", 0
+   str2 byte "Can cua so chinh phuong ban vua nhap la: ",0
+.code
+    main PROC
+        mov edx, offset str1
+        call WriteString
+        call ReadInt 
+        mov number, eax
+
+        call SQRT
+        mov edx, offset str2
+        call WriteString 
+        mov eax, sqrtNumber
+        call WriteDec
+
+    main endp
+
+    SQRT PROC
+        mov ecx, 0
+        mov ebx, number
+        Lap:
+           mov eax, ecx ; chuyen gia tri ecx vao eax
+           mul ecx      ; eax= ecx*ecx
+           .if eax==ebx 
+               mov sqrtNumber, ecx
+               ret
+           .elseif eax < ebx
+               inc ecx 
+               jmp Lap
+           .endif
+           ret               
+     SQRT ENDP 
+
+end main

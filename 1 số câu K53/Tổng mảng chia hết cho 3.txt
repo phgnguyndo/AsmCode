@@ -1,0 +1,101 @@
+; AddTwo.asm - adds two 32-bit integers.
+; Chapter 3 example
+INCLUDE Irvine32.inc
+.386
+.model flat,stdcall
+.stack 4096
+ExitProcess proto,dwExitCode:dword
+ReadArr PROTO, pArr:PTR SDWORD ,Count:DWORD
+Print PROTO,pArr:PTR SDWORD ,Count:DWORD
+CheckChiaHet PROTO,Dividend:DWORD,Divisor:DWORD
+TrungBinhCong PROTO,pArr:PTR SDWORD ,Count:DWORD
+.data
+arr sdword 50 dup (?)
+arrSize dword ?
+msg_01 db 'Nhap so phan tu: ',0
+msg_02 db 'Nhap cac phan tu: ',0
+msg_03 db 'In phan tu: ',0
+flag db ?
+TBC dword 0
+.code
+main proc         
+     MOV EDX,offset msg_01
+     call WriteString
+     call ReadDec
+     MOV arrSize,EAX
+
+     INVOKE ReadArr,ADDR arr, arrSize
+     INVOKE Print,ADDR arr, arrSize
+     INVOKE TrungBinhCong,ADDR arr,arrSize
+     CALL CRLF
+     MOV EAX,TBC
+     call WriteInt
+	invoke ExitProcess,0
+main endp
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ReadArr PROC uses eax ebx ecx edx, pArr:PTR sDWORD ,Count:DWORD
+     MOV ECX,Count
+     MOV EDI,pArr
+lap:
+     MOV EDX,offset msg_02
+     call WriteString
+     call ReadInt
+     MOV [EDI],EAX
+     ADD EDI,TYPE pArr
+     LOOP lap
+     ret
+ReadArr ENDP
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Print PROC uses eax ebx ecx edx, pArr:PTR sDWORD ,Count:DWORD
+     MOV ECX,Count
+     MOV EDI,pArr
+     MOV EDX,offset msg_03
+     call WriteString
+lap:     
+     MOV EAX,[EDI]
+     call WriteInt
+     MOV AL,' '
+     CALL WriteChar
+     ADD EDI,TYPE pArr
+     LOOP lap
+     ret
+Print ENDP
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CheckChiaHet PROC uses eax ebx ecx edx, Dividend:DWORD,Divisor:DWORD
+     
+     MOV EDX,0
+     MOV EAX,0
+     MOV EAX,Dividend
+     
+     ;tim hieu xem EAX la signed or unsigned
+     MOV EBX,0
+     ADD EAX,EBX
+     .IF Sign?;SF=1
+          NEG EAX
+     .ENDIF
+     
+     MOV EBX,Divisor
+     DIV EBX  
+     .IF EDX == 0
+          MOV flag,1;chia het
+     .ELSE
+          MOV flag,0;khong chia het
+     .ENDIF
+     ret
+CheckChiaHet ENDP
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+TrungBinhCong PROC uses eax ebx ecx edx, pArr:PTR sDWORD ,Count:DWORD
+     MOV ECX,Count
+     MOV EDI,pArr     
+lap:
+     Invoke CheckChiaHet,[EDI],3     
+     .IF flag == 1
+          MOV EAX,TBC
+          ADD EAX,[EDI]
+          MOV TBC,EAX
+     .ENDIF
+     ADD EDI, TYPE pArr
+     LOOP lap
+     ret
+TrungBinhCong ENDP
+end main

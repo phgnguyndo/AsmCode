@@ -1,0 +1,30 @@
+INCLUDE Irvine32.inc
+.data
+Mang DWORD 1, 2, 3, 4, 5, 6, 7, 8, 9
+.code
+main PROC
+mov ecx, (lengthof Mang) / 2
+mov esi, offset Mang
+mov edi, offset Mang
+mov edx, sizeof Mang
+sub edx, 4
+Dao:
+mov eax, [esi]
+mov ebx, [edi + edx]
+mov[esi], ebx
+mov[edi + edx], eax
+add esi, 4
+sub edi, 4
+Loop Dao
+mov ecx, lengthof Mang
+mov esi, offset Mang
+HienThi :
+mov eax, [esi]
+add esi, 4
+call WriteDec
+Loop HienThi
+
+
+exit
+main ENDP
+END main

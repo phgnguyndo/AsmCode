@@ -1,0 +1,2 @@
+Intelasebly
+các hàm như mov, cmp, sto,lod thì xem ví dụ trang 391( hoặc 356 trang sách)
